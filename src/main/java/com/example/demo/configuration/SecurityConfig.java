@@ -9,6 +9,8 @@ import org.springframework.security.config.annotation.web.configurers.AbstractHt
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.web.cors.CorsConfigurationSource;
 
+import static org.springframework.security.config.Customizer.withDefaults;
+
 @Configuration
 @EnableWebSecurity
 @RequiredArgsConstructor
@@ -17,9 +19,17 @@ public class SecurityConfig {
 
     @Bean
     public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
-//      (3) 인증 및 인가 외 모든 종류의 SecurityFilterChain 보안 설정 규칙 적용
+
         http.csrf(AbstractHttpConfigurer::disable);
-        http.cors((cors) -> cors.configurationSource(reactConfigurationSource));
+        //http.cors((cors) -> cors.configurationSource(reactConfigurationSource));
+
+        http.authorizeHttpRequests(
+                auth->auth
+                        .requestMatchers("/api/users/signup").permitAll()
+                        .anyRequest().permitAll()
+        );
+        //http.formLogin(withDefaults());
+
         return http.build();
     }
 }
