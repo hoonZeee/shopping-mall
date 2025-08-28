@@ -36,10 +36,10 @@ public class Product {
     @JoinColumn(name = "base_product_option_id")
     private BaseProductOption baseProductOption;
 
-    @OneToMany(fetch = FetchType.LAZY, mappedBy = "product")
+    @OneToMany(fetch = FetchType.LAZY, mappedBy = "product", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<ProductImage> productImages = new ArrayList<>();
 
-    public static Product create(String name, User user, BaseProductOption baseProductOption){
+    public static Product create(String name, User user, BaseProductOption baseProductOption) {
         return new Product(
                 null,
                 name,
@@ -51,8 +51,8 @@ public class Product {
         );
     }
 
-    public void addImage(ProductImage image) {
-        productImages.add(image);
-        image.setProduct(this);
+    public void addImage(String url) {
+        ProductImage image = ProductImage.create(url, this); //String url 로 ProductImage 만들기
+        productImages.add(image); //만든 ProductImage 추가하기
     }
 }

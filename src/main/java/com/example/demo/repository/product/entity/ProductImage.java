@@ -2,6 +2,7 @@ package com.example.demo.repository.product.entity;
 
 import jakarta.persistence.*;
 import lombok.*;
+import org.hibernate.annotations.BatchSize;
 
 import java.time.LocalDateTime;
 import java.util.List;
@@ -16,7 +17,7 @@ public class ProductImage {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id;
 
-    private String imageURL;
+    private String imageUrl;
 
     private LocalDateTime uploadedAt;
 
@@ -26,9 +27,11 @@ public class ProductImage {
     private Product product;
 
     @OneToMany(fetch = FetchType.LAZY, mappedBy = "productImage")
+    @BatchSize(size = 100)
+    @OrderBy("changedAt ASC")
     private List<Review> reviews;
 
-    public static ProductImage create(String imageURL, Product product){
+    public static ProductImage create(String imageURL, Product product) {
         return new ProductImage(
                 null,
                 imageURL,

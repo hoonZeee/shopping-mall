@@ -23,7 +23,7 @@ public class ProductCreateResponseDto {
                 entity.getName(),
                 entity.getBaseProductOption().getBaseProduct().getName(),
                 entity.getProductImages().stream()
-                        .map(ProductImage::getImageURL)
+                        .map(ProductImage::getImageUrl)
                         .toList()
         );
     }
