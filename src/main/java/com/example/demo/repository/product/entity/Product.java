@@ -9,6 +9,7 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 
 import java.time.LocalDateTime;
+import java.util.ArrayList;
 import java.util.List;
 
 @Getter
@@ -36,7 +37,7 @@ public class Product {
     private BaseProductOption baseProductOption;
 
     @OneToMany(fetch = FetchType.LAZY, mappedBy = "product")
-    private List<ProductImage> productImages;
+    private List<ProductImage> productImages = new ArrayList<>();
 
     public static Product create(String name, User user, BaseProductOption baseProductOption){
         return new Product(
@@ -46,7 +47,12 @@ public class Product {
                 LocalDateTime.now(),
                 user,
                 baseProductOption,
-                null
+                new ArrayList<>()
         );
+    }
+
+    public void addImage(ProductImage image) {
+        productImages.add(image);
+        image.setProduct(this);
     }
 }

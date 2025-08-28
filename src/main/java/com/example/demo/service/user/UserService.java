@@ -1,4 +1,4 @@
-package com.example.demo.service;
+package com.example.demo.service.user;
 
 import com.example.demo.controller.user.dto.UserSignUpRequestDto;
 import com.example.demo.controller.user.dto.UserSignUpResponseDto;
@@ -28,6 +28,7 @@ public class UserService implements UserDetailsService {
         );
 
         User created = userRepository.save(user);
+
 
         return UserSignUpResponseDto.from(created);
     }

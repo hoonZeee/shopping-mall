@@ -1,12 +1,13 @@
 package com.example.demo.security;
 
+import com.example.demo.repository.user.entity.User;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.authentication.AuthenticationProvider;
 import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.AuthenticationException;
-import org.springframework.security.core.userdetails.User;
+
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Component;
@@ -29,7 +30,7 @@ public class UserNamePasswordAuthenticationProvider implements AuthenticationPro
         if( !passwordEncoder.matches(password, loggedUser.getPassword())) {
             throw new BadCredentialsException(loggedUser.getUsername()+ " : Invalid password");
         }
-        return new UsernamePasswordAuthenticationToken(username, password, loggedUser.getAuthorities());
+        return new UsernamePasswordAuthenticationToken(loggedUser, null, loggedUser.getAuthorities());
     }
 
     @Override

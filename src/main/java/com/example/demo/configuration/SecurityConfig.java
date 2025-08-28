@@ -26,9 +26,9 @@ public class SecurityConfig {
         http.authorizeHttpRequests(
                 auth->auth
                         .requestMatchers("/api/users/signup").permitAll()
-                        .anyRequest().permitAll()
+                        .anyRequest().authenticated()
         );
-        //http.formLogin(withDefaults());
+        http.httpBasic(withDefaults());
 
         return http.build();
     }

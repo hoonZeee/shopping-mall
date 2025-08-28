@@ -1,10 +1,7 @@
 package com.example.demo.repository.product.entity;
 
 import jakarta.persistence.*;
-import lombok.AccessLevel;
-import lombok.AllArgsConstructor;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
+import lombok.*;
 
 import java.time.LocalDateTime;
 import java.util.List;
@@ -23,6 +20,7 @@ public class ProductImage {
 
     private LocalDateTime uploadedAt;
 
+    @Setter
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "product_id")
     private Product product;
@@ -39,4 +37,5 @@ public class ProductImage {
                 null
         );
     }
+
 }
