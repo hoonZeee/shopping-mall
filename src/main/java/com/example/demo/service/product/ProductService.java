@@ -3,15 +3,18 @@ package com.example.demo.service.product;
 import com.example.demo.controller.product.dto.ProductAllResponseDto;
 import com.example.demo.controller.product.dto.ProductCreateRequestDto;
 import com.example.demo.controller.product.dto.ProductCreateResponseDto;
+import com.example.demo.controller.product.dto.ProductPageResponseDto;
 import com.example.demo.repository.product.*;
 import com.example.demo.repository.product.entity.BaseProduct;
 import com.example.demo.repository.product.entity.BaseProductOption;
 import com.example.demo.repository.product.entity.Product;
-import com.example.demo.repository.product.entity.ProductImage;
+import com.example.demo.repository.product.entity.vo.CurrentStatus;
 import com.example.demo.repository.user.UserRepository;
 import com.example.demo.repository.user.entity.User;
 import jakarta.annotation.PostConstruct;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -73,6 +76,10 @@ public class ProductService {
                 .toList();
     }
 
-
+    @Transactional(readOnly = true)
+    public Page<ProductPageResponseDto> getRegisteredProducts(Pageable pageable) {
+        return productRepository.findByCurrentStatus(CurrentStatus.REGISTERED, pageable)
+                .map(ProductPageResponseDto::from);
+    }
 }
 

@@ -3,10 +3,15 @@ package com.example.demo.controller.product;
 import com.example.demo.controller.product.dto.ProductAllResponseDto;
 import com.example.demo.controller.product.dto.ProductCreateRequestDto;
 import com.example.demo.controller.product.dto.ProductCreateResponseDto;
+import com.example.demo.controller.product.dto.ProductPageResponseDto;
 import com.example.demo.repository.user.entity.User;
 import com.example.demo.service.product.ProductService;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
@@ -37,4 +42,13 @@ public class ProductController {
     }
 
 
+    @GetMapping
+    public ResponseEntity<Page<ProductPageResponseDto>> getRegisteredProducts(
+            @RequestParam(defaultValue = "0") int page, //0부터 시작
+            @RequestParam(defaultValue = "10") int size //페이지당 디폴트 10개
+    ) {
+        Pageable pageable = PageRequest.of(page, size, Sort.by(Sort.Direction.DESC, "createdAt"));
+        Page<ProductPageResponseDto> result = productService.getRegisteredProducts(pageable);
+        return ResponseEntity.ok(result);
+    }
 }
