@@ -1,11 +1,8 @@
 package com.example.demo.controller.product;
 
-import com.example.demo.controller.product.dto.ProductAllResponseDto;
-import com.example.demo.controller.product.dto.ProductCreateRequestDto;
-import com.example.demo.controller.product.dto.ProductCreateResponseDto;
-import com.example.demo.controller.product.dto.ProductPageResponseDto;
+import com.example.demo.controller.product.dto.*;
 import com.example.demo.repository.user.entity.User;
-import com.example.demo.service.product.ProductService;
+import com.example.demo.service.application.product.ProductService;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
@@ -51,4 +48,14 @@ public class ProductController {
         Page<ProductPageResponseDto> result = productService.getRegisteredProducts(pageable);
         return ResponseEntity.ok(result);
     }
+
+    @PatchMapping("/{productId}/status") //상태만 바꾸니까 patch
+    public ResponseEntity<ProductAllResponseDto> changeStatus(
+            @PathVariable Integer productId,
+            @RequestBody @Valid ProductStatusUpdateRequestDto request
+    ) {
+        ProductAllResponseDto created = productService.reviewProduct(productId, request.getCurrentStatus());
+        return ResponseEntity.ok(created);
+    }
+
 }

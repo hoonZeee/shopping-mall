@@ -1,4 +1,4 @@
-package com.example.demo.service.user;
+package com.example.demo.service.application.user;
 
 import com.example.demo.controller.user.dto.UserSignUpRequestDto;
 import com.example.demo.controller.user.dto.UserSignUpResponseDto;
@@ -18,7 +18,7 @@ public class UserService implements UserDetailsService {
     private final PasswordEncoder passwordEncoder;
 
 
-    public UserSignUpResponseDto signUp(UserSignUpRequestDto request){
+    public UserSignUpResponseDto signUp(UserSignUpRequestDto request) {
         String encode = passwordEncoder.encode(request.getPassword());
 
         User user = User.create(
@@ -34,9 +34,9 @@ public class UserService implements UserDetailsService {
     }
 
     @Override
-    public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException{
+    public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
         return userRepository.findByUsername(username)
-                .orElseThrow(()-> new UsernameNotFoundException("존재하지않는 유저 - username : " + username));
+                .orElseThrow(() -> new UsernameNotFoundException("존재하지않는 유저 - username : " + username));
     }
 
 }

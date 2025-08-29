@@ -13,7 +13,7 @@ public class UserSignUpRequestDto {
     private String username;
 
     //대소문자 최소 1개씩, 8글자이상
-    @Pattern(regexp = "^(?=.*[a-z])(?=.*[A-Z]).{8,}$")
+    @Pattern(regexp = "^(?=.*[a-z])(?=.*[A-Z]).{8,}$", message = "비밀번호는 대소문자 포함 8글자 이상이어야 합니다.")
     private String password;
 
     private String name;

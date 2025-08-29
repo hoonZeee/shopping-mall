@@ -55,4 +55,8 @@ public class Product {
         ProductImage image = ProductImage.create(url, this); //String url 로 ProductImage 만들기
         productImages.add(image); //만든 ProductImage 추가하기
     }
+
+    public void changeStatus(CurrentStatus newStatus) {
+        this.currentStatus = newStatus;
+    }
 }

@@ -1,13 +1,16 @@
-package com.example.demo.service.product;
+package com.example.demo.service.application.product;
 
 import com.example.demo.controller.product.dto.ProductAllResponseDto;
 import com.example.demo.controller.product.dto.ProductCreateRequestDto;
 import com.example.demo.controller.product.dto.ProductCreateResponseDto;
 import com.example.demo.controller.product.dto.ProductPageResponseDto;
+import com.example.demo.exception.BusinessException;
+import com.example.demo.exception.ErrorCode;
 import com.example.demo.repository.product.*;
 import com.example.demo.repository.product.entity.BaseProduct;
 import com.example.demo.repository.product.entity.BaseProductOption;
 import com.example.demo.repository.product.entity.Product;
+import com.example.demo.repository.product.entity.Review;
 import com.example.demo.repository.product.entity.vo.CurrentStatus;
 import com.example.demo.repository.user.UserRepository;
 import com.example.demo.repository.user.entity.User;
@@ -81,5 +84,44 @@ public class ProductService {
         return productRepository.findByCurrentStatus(CurrentStatus.REGISTERED, pageable)
                 .map(ProductPageResponseDto::from);
     }
+
+    @Transactional
+    public ProductAllResponseDto reviewProduct(Integer productId, CurrentStatus targetStatus) {
+
+        Product product = productRepository.findById(productId)
+                .orElseThrow(() -> new BusinessException(ErrorCode.PRODUCT_NOT_FOUND));
+
+        CurrentStatus from = product.getCurrentStatus();
+
+        if (!canTransition(from, targetStatus)) {
+            throw new IllegalArgumentException("해당 상태로 전환할 수 없습니다. from=" + from + " to=" + targetStatus);
+        }
+
+
+        product.changeStatus(targetStatus);
+
+
+        product.getProductImages().forEach(img -> {
+            Review review = Review.create(img, targetStatus);
+            img.getReviews().add(review);
+        });
+
+        return ProductAllResponseDto.from(product);
+    }
+
+    private boolean canTransition(CurrentStatus from, CurrentStatus to) {
+        if (to == CurrentStatus.APPROVE) {
+            return from == CurrentStatus.REGISTERED || from == CurrentStatus.REJECTED || from == CurrentStatus.BANNED;
+        }
+        if (to == CurrentStatus.REJECTED) {
+            return from == CurrentStatus.REGISTERED;
+        }
+        if (to == CurrentStatus.BANNED) {
+            return from == CurrentStatus.APPROVE;
+        }
+        return false;
+    }
+
+
 }
 

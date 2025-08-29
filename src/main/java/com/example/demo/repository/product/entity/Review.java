@@ -28,12 +28,20 @@ public class Review {
     @JoinColumn(name = "product_image_id")
     private ProductImage productImage;
 
-    public static Review create(ProductImage productImage){
+    public static Review create(ProductImage productImage) {
         return new Review(
                 null,
                 CurrentStatus.REGISTERED,
                 LocalDateTime.now(),
                 productImage
         );
+    }
+
+    public static Review create(ProductImage productImage, CurrentStatus targetStatus) {
+        return new Review(
+                null,
+                targetStatus,
+                LocalDateTime.now(),
+                productImage);
     }
 }

@@ -2,7 +2,7 @@ package com.example.demo.controller.user;
 
 import com.example.demo.controller.user.dto.UserSignUpRequestDto;
 import com.example.demo.controller.user.dto.UserSignUpResponseDto;
-import com.example.demo.service.user.UserService;
+import com.example.demo.service.application.user.UserService;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
@@ -19,7 +19,7 @@ public class UserController {
     private final UserService userService;
 
     @PostMapping("/signup")
-    public ResponseEntity<UserSignUpResponseDto> signup(@Valid @RequestBody UserSignUpRequestDto request){
+    public ResponseEntity<UserSignUpResponseDto> signup(@Valid @RequestBody UserSignUpRequestDto request) {
         return ResponseEntity.ok(userService.signUp(request));
     }
 }
